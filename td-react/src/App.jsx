@@ -3,6 +3,11 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 
+function Info(){
+    return (
+        <p>Ici, nous afficherons des informations interessantes :)</p>
+    )
+}
 function Header() {
     return (
         <header>
@@ -19,6 +24,7 @@ function App() {
   return (
     <>
         <Header />
+        <Info />
       <div>
         <a href="https://vite.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
