@@ -38,10 +38,34 @@ function Header() {
     );
 }
 
+function NavigationMenu({ isMenuOpen, handleClick }) {
+    return (
+        <nav className={`nav-menu ${isMenuOpen ? 'open' : ''}`}>
+            <ul style={{ listStyle: 'none', padding: 0 }}>
+                <li><button onClick={() => handleClick('Notes')} style={{ background: 'transparent', color: '#ebe7ef', border: 'none', cursor: 'pointer' }}>Notes</button></li>
+                <li><button onClick={() => handleClick('Etudiants')} style={{ background: 'transparent', color: '#ebe7ef', border: 'none', cursor: 'pointer' }}>Etudiants</button></li>
+                <li><button onClick={() => handleClick('Matières')} style={{ background: 'transparent', color: '#ebe7ef', border: 'none', cursor: 'pointer' }}>Matières</button></li>
+                <li><button onClick={() => handleClick('A propos')} style={{ background: 'transparent', color: '#ebe7ef', border: 'none', cursor: 'pointer' }}>A propos</button></li>
+            </ul>
+        </nav>
+    );
+}
+
+function HamburgerButton({ onClick }) {
+    return (
+        <div className="hamburger" onClick={onClick}>
+            <div className="line"></div>
+            <div className="line"></div>
+            <div className="line"></div>
+        </div>
+    );
+}
+
 function App() {
     const [count, setCount] = useState(0);
     const [data, setData] = useState([]);
     const [randomItem, setRandomItem] = useState(null);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     useEffect(() => {
         fetch('/data.json')
@@ -61,11 +85,8 @@ function App() {
             });
     }, []);
 
-
-
-    // Function to get a random item from the data
     function getRandomItem(data) {
-        if (!data || data.length === 0) return null; // Prevent errors if data is empty or not yet loaded
+        if (!data || data.length === 0) return null;
         const randomIndex = Math.floor(Math.random() * data.length);
         return data[randomIndex];
     }
@@ -78,9 +99,20 @@ function App() {
     const min = currentDate.getMinutes().toString().padStart(2, '0');
     const sec = currentDate.getSeconds().toString().padStart(2, '0');
 
+    const toggleMenu = () => {
+        setIsMenuOpen(!isMenuOpen);
+    };
+
+    const handleMenuClick = (item) => {
+        alert(`Vous avez cliqué sur: ${item}`);
+        toggleMenu();
+    };
+
     return (
         <>
             <Header />
+            <HamburgerButton onClick={toggleMenu} />
+            <NavigationMenu isMenuOpen={isMenuOpen} handleClick={handleMenuClick} />
             <MainContent
                 jour={jour}
                 mois={mois}

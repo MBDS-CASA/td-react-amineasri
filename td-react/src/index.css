@@ -267,3 +267,55 @@ button:active {
 footer{
   align-content: center;
 }
+
+.hamburger {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 21px;
+}
+
+.hamburger .line {
+  width: 100%;
+  height: 5px;
+  background-color: #ebe7ef;
+  border-radius: 5px;
+}
+
+.nav-menu {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #280a48;
+  width: 100%;
+  height: 100%;
+  padding-top: 80px;
+}
+
+.nav-menu.open {
+  display: block;
+}
+
+.nav-menu ul {
+  list-style: none;
+  padding: 0;
+  text-align: center;
+}
+
+.nav-menu li {
+  margin: 20px 0;
+}
+
+.nav-menu button {
+  background: transparent;
+  color: #ebe7ef;
+  border: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+}
