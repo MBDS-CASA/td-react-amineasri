@@ -3,14 +3,14 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 
-function MainContent(){
+function MainContent(props){
     return (
-        <p>Ici, nous afficherons des informations interessantes :)</p>
+        <p>Bonjour, on est le {props.jour}, {props.mois}, {props.anne} et il est {props.heure}:{props.min}:{props.sec}</p>
     )
 }
 function Foot (props){
     return (
-        <footer>Tous droits réservés - {props.nom} {props.prenom}" - Le texte doit s'afficher tout en bas de la page et centré au millieu</footer>
+        <footer>Tous droits réservés ©{props.anne}  - {props.nom} {props.prenom}" - Le texte doit s'afficher tout en bas de la page et centré au millieu</footer>
     )
 }
 function Header() {
@@ -25,11 +25,25 @@ function Header() {
 
 function App() {
   const [count, setCount] = useState(0)
+    const currentDate = new Date();
+    const jour = currentDate.toLocaleDateString('fr-FR', { weekday: 'long' });
+    const mois = currentDate.toLocaleDateString('fr-FR', { month: 'long' });
+    const anne = currentDate.getFullYear();
+    const heure = currentDate.getHours().toString().padStart(2, '0');
+    const min = currentDate.getMinutes().toString().padStart(2, '0');
+    const sec = currentDate.getSeconds().toString().padStart(2, '0');
 
   return (
     <>
         <Header />
-        <MainContent />
+        <MainContent
+            jour={jour}
+            mois={mois}
+            anne={anne}
+            heure={heure}
+            min={min}
+            sec={sec}
+        />
       <div>
         <a href="https://vite.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
@@ -50,7 +64,7 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
-        <Foot nom={"Asri"} prenom={"Mohamed Amine"} />
+        <Foot anne={anne} nom={"Asri"} prenom={"Mohamed Amine"} />
     </>
   )
 }
