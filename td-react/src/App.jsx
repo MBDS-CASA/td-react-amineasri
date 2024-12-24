@@ -2,6 +2,14 @@ import { useState, useEffect } from 'react';
 import reactLogo from './assets/react.svg';
 import viteLogo from '/vite.svg';
 import './App.css';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import TablePagination from '@mui/material/TablePagination';
+import Paper from '@mui/material/Paper';
 
 function MainContent(props) {
     return (
@@ -60,6 +68,119 @@ function HamburgerButton({ onClick }) {
         </div>
     );
 }
+function StudentsTable({ data, currentSection }) {
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
+    const [searchQuery, setSearchQuery] = useState('');
+
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
+
+    const handleSearchChange = (event) => {
+        setSearchQuery(event.target.value);
+    };
+
+    const filterData = (data) => {
+        if (!searchQuery) return data;
+        return data.filter((item) => {
+            const fullName = `${item.student.firstname} ${item.student.lastname}`.toLowerCase();
+            const courseName = item.course.toLowerCase();
+            const grade = item.grade ? item.grade.toString().toLowerCase() : '';
+            const date = item.date.toLowerCase();
+
+            return (
+                fullName.includes(searchQuery.toLowerCase()) ||
+                courseName.includes(searchQuery.toLowerCase()) ||
+                grade.includes(searchQuery.toLowerCase()) ||
+                date.includes(searchQuery.toLowerCase())
+            );
+        });
+    };
+
+    const filteredData = filterData(data);
+    const paginatedData = filteredData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+
+    return (
+        <div>
+            {/* Search Bar Styling */}
+            <div style={{ margin: '20px 0', display: 'flex', justifyContent: 'center' }}>
+                <input
+                    type="text"
+                    placeholder="Search..."
+                    value={searchQuery}
+                    onChange={handleSearchChange}
+                    style={{
+                        padding: '10px 15px',
+                        borderRadius: '5px',
+                        border: '1px solid #ccc',
+                        width: '300px',
+                        fontSize: '16px',
+                        outline: 'none',
+                        transition: 'border-color 0.3s ease',
+                    }}
+                />
+            </div>
+
+            <TableContainer component={Paper} style={{ marginTop: '20px' }}>
+                <Table sx={{ minWidth: 650 }} aria-label="Students Table">
+                    <TableHead>
+                        <TableRow>
+                            {currentSection === 'Etudiants' && <TableCell>First Name</TableCell>}
+                            {currentSection === 'Etudiants' && <TableCell>Last Name</TableCell>}
+                            {currentSection === 'Notes' && <TableCell>First Name</TableCell>}
+                            {currentSection === 'Notes' && <TableCell>Last Name</TableCell>}
+                            {currentSection === 'Notes' && <TableCell>Course</TableCell>}
+                            {currentSection === 'Notes' && <TableCell>Grade</TableCell>}
+                            {currentSection === 'Matières' && <TableCell>Course</TableCell>}
+                            <TableCell>Date</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {paginatedData.map((item, index) => (
+                            <TableRow key={index}>
+                                {currentSection === 'Etudiants' && (
+                                    <TableCell>{item.student.firstname}</TableCell>
+                                )}
+                                {currentSection === 'Etudiants' && (
+                                    <TableCell>{item.student.lastname}</TableCell>
+                                )}
+                                {currentSection === 'Notes' && (
+                                    <TableCell>{item.student.firstname}</TableCell>
+                                )}
+                                {currentSection === 'Notes' && (
+                                    <TableCell>{item.student.lastname}</TableCell>
+                                )}
+                                {currentSection === 'Notes' && <TableCell>{item.course}</TableCell>}
+                                {currentSection === 'Notes' && <TableCell>{item.grade}</TableCell>}
+                                {currentSection === 'Matières' && <TableCell>{item.course}</TableCell>}
+                                <TableCell>{item.date}</TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+                <TablePagination
+                    rowsPerPageOptions={[5, 10, 15]}
+                    component="div"
+                    count={filteredData.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+            </TableContainer>
+        </div>
+    );
+}
+
+
+
+
 
 function App() {
     const [count, setCount] = useState(0);
@@ -148,10 +269,10 @@ function App() {
                 </div>
             )}
 
+            {data.length > 0 && <StudentsTable data={data} currentSection={currentSection} />}
             <Foot anne={anne} nom={"Asri"} prenom={"Mohamed Amine"} />
         </>
     );
 }
-
 
 export default App;
