@@ -66,6 +66,7 @@ function App() {
     const [data, setData] = useState([]);
     const [randomItem, setRandomItem] = useState(null);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [currentSection, setCurrentSection] = useState('');
 
     useEffect(() => {
         fetch('/data.json')
@@ -104,8 +105,8 @@ function App() {
     };
 
     const handleMenuClick = (item) => {
-        alert(`Vous avez cliqué sur: ${item}`);
-        toggleMenu();
+        setCurrentSection(item);
+        setIsMenuOpen(false);
     };
 
     return (
@@ -140,9 +141,17 @@ function App() {
             </div>
             <button onClick={() => setRandomItem(getRandomItem(data))}>Tirer un élément aléatoire</button>
             {randomItem && <ItemDisplay item={randomItem} />}
+
+            {currentSection && (
+                <div className="current-section">
+                    <h2>Vous actuellement dans la section {currentSection}</h2>
+                </div>
+            )}
+
             <Foot anne={anne} nom={"Asri"} prenom={"Mohamed Amine"} />
         </>
     );
 }
+
 
 export default App;
